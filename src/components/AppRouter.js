@@ -1,24 +1,35 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { privateRoutes } from "../routes";
-import { CHAT_ROUTE, LOGIN_ROUTE } from "../utils/consts";
+import { Context } from "../index";
+import { privateRoutes, publicRoutes } from "../routes";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const AppRouter = () => {
-  const user = false;
+  const {auth} = useContext(Context);
+  const [user] = useAuthState(auth);
 
   return user ? (
     <Routes>
-      {privateRoutes.map(({ path, Component }, index) => (
-        <Route key={index} path={path} component={Component} exact={true} />
+      {privateRoutes.map((route) => (
+        <Route
+          key={route.path}
+          path={route.path}
+          element={route.element}
+          exact={route.exact}
+        />
       ))}
-      <Route path="" element={<Navigate to="/chat" replace />} />
     </Routes>
   ) : (
     <Routes>
-      {privateRoutes.map(({ path, Component }, index) => (
-        <Route key={index} path={path} component={Component} exact={true} />
+      {publicRoutes.map((route) => (
+        <Route
+          key={route.path}
+          path={route.path}
+          element={route.element}
+          exact={route.exact}
+        />
       ))}
-      <Route path="" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
 };
