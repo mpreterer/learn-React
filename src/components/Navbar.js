@@ -5,7 +5,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from "react-router-dom";
+import { LOGIN_ROUTE } from "../utils/consts";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Context } from "..";
+
+function NavBar() {
+  const {auth} = React.useContext(Context);
+  const [user] = useAuthState(auth);
+
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -18,7 +27,6 @@ import MenuIcon from '@mui/icons-material/Menu';
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             React + firebase
